@@ -25,6 +25,9 @@ padd_length = 60
 padd_width = 15
 x_padd = 0
 y_padd = 20
+score = 10
+#create font 
+font = pygame.font.SysFont(None, 25)
 # -- Manages how fast screen refreshes 
 clock = pygame.time.Clock() 
 
@@ -38,19 +41,19 @@ while not done:
         if event.type == pygame.KEYDOWN: 
             if event.key == pygame.K_UP and y_padd > 0:
                 # - write logic that happens on key press here 
-                y_padd = y_padd - 5 
+                y_padd = y_padd - 7
             elif event.key == pygame.K_DOWN and y_padd < size[1] - padd_length: 
             # - write logic that happens on key press here
-                y_padd = y_padd + 5 
+                y_padd = y_padd + 7 
             #End If
         #End If
     #Next event 
     keys = pygame.key.get_pressed() 
     ## - the up key or down key has been pressed 
     if keys[pygame.K_UP] and y_padd > 0: 
-        y_padd = y_padd - 5
+        y_padd = y_padd - 7
     elif keys[pygame.K_DOWN] and y_padd < size[1] - padd_length: 
-        y_padd = y_padd + 5
+        y_padd = y_padd + 7
     #endif
     # -- Game logic goes after this comment
     x_val = x_val + x_direction
@@ -67,7 +70,7 @@ while not done:
     #endif
     # -- ball bounces off paddle
     if x_val == x_padd + padd_width and y_val >= y_padd and y_val <= y_padd + 40:
-        x_direction = x_direction*-1
+        x_direction = x_direction*-1.5
     #endif
     # - - reset ball to original position, moving in the original direction
     if x_val < 0:
@@ -75,13 +78,22 @@ while not done:
         y_val = 200
         x_direction = 5
         y_direction = 5
+        #update score
+        score = score - 1
     #endif
-    
+    #quit game if score = 0
+    if score == 0:
+        done = True
+    #endif
     # -- Screen background is BLACK 
     screen.fill (BLACK) 
     # -- Draw here 
     pygame.draw.rect(screen, BLUE, (x_val,y_val, ball_width,20)) 
     pygame.draw.rect(screen, WHITE, (x_padd,y_padd,padd_width,padd_length)) 
+    #show score
+    text = font.render(("Score = " + str(score)), True, WHITE)
+    screen.blit(text, ( 280, 100 ) )
+
     # -- flip display to reveal new position of objects 
     pygame.display.flip()
     # - The clock ticks over 
