@@ -1,6 +1,7 @@
 import pygame
 import random
 import math 
+import PIL
 # -- Global Constants 
 # -- Colours 
 BLACK = (0,0,0) 
@@ -24,12 +25,15 @@ class Invader(pygame.sprite.Sprite):
         super().__init__() 
         # Create a sprite and fill it with colour
         # Import image
-        self.image = pygame.Surface([width,height]) 
-        self.image.fill(color) 
+        image = pygame.image.load('comp sci space invader.png')
+        image = pygame.transform.scale(image, (50, 50))
+        self.image = image
+        #self.image = pygame.Surface([width,height]) 
+        #self.image.fill(color) 
         # Set the position of the sprite 
         self.rect = self.image.get_rect() 
         self.rect.x = random.randrange(0, 600) 
-        self.rect.y = random.randrange(-50, 0)
+        self.rect.y = random.randrange(-100, 0)
         # Set speed of the sprite 
         self.speed = speed  
     # Class update function - runs for each pass through the game loop 
@@ -122,7 +126,7 @@ bullet_group = pygame.sprite.Group()
 all_sprites_group = pygame.sprite.Group()
 
 # Create the invaders 
-number_of_invaders = 40 # we are creating 50 snowflakes
+number_of_invaders = 20 # we are creating 50 snowflakes
 for x in range (number_of_invaders): 
     my_invader = Invader(BLUE, 10, 10, 1) # snowflakes are white with size 5 by 5 px
     invader_group.add (my_invader) # adds the new snowflake to the group of snowflakes
