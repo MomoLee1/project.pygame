@@ -17,6 +17,18 @@ screen = pygame.display.set_mode(size)
 # -- Title of new window/screen 
 pygame.display.set_caption("Invaders") 
 
+## -- Define the class game which is a sprite 
+class Game(pygame.sprite.Sprite): 
+    # Define the constructor for snow 
+    def __init__(self):
+        # Call the sprite constructor 
+        super().__init__() 
+    # Class update function - runs for each pass through the game loop 
+    def update(self): 
+        #...
+    #End Procedure
+#End Class
+
 ## -- Define the class snow which is a sprite 
 class Invader(pygame.sprite.Sprite): 
     # Define the constructor for snow 
@@ -81,6 +93,23 @@ class Player(pygame.sprite.Sprite):
     # Class update function - runs for each pass through the game loop 
     def update(self): 
         self.rect.x = self.rect.x + self.speed
+         # -- User input and controls
+        for event in pygame.event.get(): 
+            if event.type == pygame.KEYDOWN: # - a key is down 
+                if event.key == pygame.K_LEFT: # - if the left key pressed
+                    self.player_set_speed(-3) # speed set to -3
+                elif event.key == pygame.K_RIGHT: # - if the right key pressed
+                    self.player_set_speed(3) # speed set to 3
+                elif event.key == pygame.K_UP:
+                    if player.bullet_count != 0:
+                        player.bullet_count = player.bullet_count - 1
+                        my_bullet = Bullet(RED, player.rect.x + 4, 470) # snowflakes are white with size 5 by 5 px
+                        bullet_group.add (my_bullet) # adds the new snowflake to the group of snowflakes
+                        all_sprites_group.add (my_bullet) # adds it to the group of all Sprites
+            elif event.type == pygame.KEYUP: # - a key released 
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT: 
+                    player.player_set_speed (0) # speed set to 0
+    #Next event
     #End Procedure
 
 
@@ -93,7 +122,7 @@ class Bullet(pygame.sprite.Sprite):
         # Call the sprite constructor 
         super().__init__() 
         #Set size of sprite
-        self.width = 10
+        self.width = 2
         self.height = 2
         # Create a sprite and fill it with colour 
         self.image = pygame.Surface([self.width,self.height]) 
@@ -144,26 +173,10 @@ all_sprites_group.add(player)
 clock = pygame.time.Clock() 
 
 ### -- Game Loop 
-while not done: 
-     # -- User input and controls
+while not done:
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             done = True 
-        elif event.type == pygame.KEYDOWN: # - a key is down 
-            if event.key == pygame.K_LEFT: # - if the left key pressed
-                player.player_set_speed(-3) # speed set to -3
-            elif event.key == pygame.K_RIGHT: # - if the right key pressed
-                player.player_set_speed(3) # speed set to 3
-            elif event.key == pygame.K_UP:
-                if player.bullet_count != 0:
-                    player.bullet_count = player.bullet_count - 1
-                    my_bullet = Bullet(RED, player.rect.x + 4, 470) # snowflakes are white with size 5 by 5 px
-                    bullet_group.add (my_bullet) # adds the new snowflake to the group of snowflakes
-                    all_sprites_group.add (my_bullet) # adds it to the group of all Sprites
-        elif event.type == pygame.KEYUP: # - a key released 
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT: 
-                player.player_set_speed (0) # speed set to 0
-    #Next event
     # -- Game logic goes after this comment
     # -- when invader hits the player, player loses one life. 
     player_hit_group = pygame.sprite.spritecollide(player, invader_group, True)
